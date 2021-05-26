@@ -1,0 +1,60 @@
+# Configuration for Rasa NLU.
+# https://rasa.com/docs/rasa/nlu/components/
+language: zh
+
+pipeline:
+# # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
+# # If you'd like to customize it, uncomment and adjust the pipeline.
+# # See https://rasa.com/docs/rasa/tuning-your-model for more information.
+#   - name: WhitespaceTokenizer
+  - name: LanguageModelTokenizer
+  - name: LanguageModelFeaturizer
+    model_weights: "data/model"  # bert_chinese_base
+    model_name: "bert"
+  # 测试加入Spacy做实体抽取
+  - name: SpacyNLP
+    model: "zh_core_web_trf"
+    case_sensitive: False
+  - name: SpacyEntityExtractor
+#  # 添加CRF自定义实体识别
+#  - name: CRFEntityExtractor
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 100
+    constrain_similarities: true
+  - name: EntitySynonymMapper  # 同义实体映射
+  - name: ResponseSelector
+    epochs: 100
+    constrain_similarities: true
+  - name: FallbackClassifier
+    threshold: 0.6
+    ambiguity_threshold: 0.3
+  - name: DucklingEntityExtractor
+    # url of the running duckling server
+    url: "http://localhost:8000"
+    # dimensions to extract
+    dimensions: [ "number", "email"]
+    locale: "zh_CN"
+    timezone: "Asia/Shanghai"
+
+# Configuration for Rasa Core.
+# https://rasa.com/docs/rasa/core/policies/
+policies:
+# # No configuration for policies was provided. The following default policies were used to train your model.
+# # If you'd like to customize them, uncomment and adjust the policies.
+# # See https://rasa.com/docs/rasa/policies for more information.
+    - name: MemoizationPolicy
+    - name: TEDPolicy
+      max_history: 5
+      epochs: 100
+      constrain_similarities: true
+    - name: RulePolicy
+      core_fallback_threshold: 0.4
+      core_fallback_action_name: "action_default_fallback"
+      enable_fallback_prediction: True

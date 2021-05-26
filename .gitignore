@@ -1,0 +1,9 @@
+events.db*
+rasa.db
+models/*
+*/__pycache__
+.idea
+data/model/
+events.db
+events.db-shm
+events.db-wal

@@ -1,0 +1,74 @@
+version: "2.0"
+# 定义故事线，作为规则的补充
+stories:
+- story: intro
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+# 如果用户瞎填，那就给用户一个默认值
+- story: Story from Conversation ID 8d95dd4cc13d4c95957b789f94af0850
+  steps:
+  - intent: nlu_fallback
+  - action: utter_cheer_up
+
+- story: order shoes
+  steps:
+  - intent: order_shoes
+  - action: utter_order_shoes
+
+# 补充--仓库查询后问卷线
+- story: User stops product_stock
+  steps:
+  - active_loop: product_stock_form
+  - intent: deny
+  - action: utter_start_over
+  - action: utter_greet
+  - action: action_deactivate_loop
+  - active_loop: null
+
+# 补充订单查询后用户问卷，假设用户不填就退出
+- story: User stops order_status
+  steps:
+  - active_loop: order_status_form
+  - intent: deny
+  - action: utter_start_over
+  - action: utter_greet
+  - action: action_deactivate_loop
+  - active_loop: null
+
+# 补充--用户取消订单后的问卷
+- story: User stops cancel_form
+  steps:
+  - active_loop: cancel_form
+  - intent: deny
+  - action: utter_start_over
+  - action: utter_greet
+  - action: action_deactivate_loop
+  - active_loop: null
+
+# 补充用户退货后的问卷
+- story: User stops return_form
+  steps:
+  - active_loop: return_form
+  - intent: deny
+  - action: utter_start_over
+  - action: utter_greet
+  - action: action_deactivate_loop
+  - active_loop: null
+
+# 补充用户订阅后的表单用户线
+#- story: User stops product_updates_form
+#  steps:
+#  - active_loop: product_updates_form
+#  - intent: deny
+#  - action: utter_start_over
+#  - action: utter_greet
+#  - action: action_deactivate_loop
+#  - active_loop: null
+
+# 循环用户姓名
+- story: user asks for name
+  steps:
+  - intent: whats_your_name
+  - action: action_give_name

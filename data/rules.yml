@@ -1,0 +1,151 @@
+version: "2.0"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+#  - triggers: utter_iamabot
+  - action: utter_iamabot
+
+# 查询订单状态
+- rule: Activate email form for order status
+  steps:
+  - intent: order_status  # 如果意图是“查询订单状态”就触发后续操作
+  - action: action_deactivate_loop  # 停用其它动作
+  - active_loop: null  # 激活表单为空
+  - action: order_status_form  # 触发表单动作
+  - active_loop: order_status_form  # 激活表单，开启循环，收集槽位数据
+
+## 查询完订单状态然后让用户填一个问卷
+- rule: Submit order status form, needs survey
+  condition:
+  - active_loop: order_status_form
+  steps:
+  - action: order_status_form
+  - active_loop: null
+  - action: action_order_status  # 接上面一步
+  - action: survey_form  # 开启评价表单
+  - active_loop: survey_form  # 循环，直到评价结束
+
+
+# ---- 取消订单 --- #
+# 取消订单信息-需要提供邮箱
+- rule: Activate email form for cancelling order
+  steps:
+    - intent: order_cancel
+    - action: action_deactivate_loop  # 停止之前的动作
+    - active_loop: null  # 停止循环表单
+    - action: cancel_form  # 填写表单模板
+    - active_loop: cancel_form  # 循环表单
+
+- rule: "取消订单后，激活自定义action并让用户提交反馈"
+  condition:
+  - active_loop: cancel_form
+  steps:
+  - action: cancel_form
+  - active_loop: null
+  - action: action_cancel_order
+  - action: survey_form
+  - active_loop: survey_form
+
+# -- 退货 --
+- rule: "用户要退货，触发退货模板"
+  steps:
+  - intent: return
+  - action: action_deactivate_loop
+  - active_loop: null
+  - action: return_form
+  - active_loop: return_form
+
+## 退货
+#- rule: "用户退货，邮箱已提供，触发自定义服务"
+#  condition:
+#  - active_loop: return_form  # 条件1：当前退货表单已经激活
+#  - slot_was_set:  # 条件2：槽位已经填充
+#    - email: true
+#  steps:
+#  - action: return_form
+#  - active_loop: null  # 取消激活return
+#  - action: action_return  # 返回自定义动作
+
+# 退货后服务评价
+- rule: "用户退货表单已提交，触发表单服务"
+  condition:
+  - active_loop: return_form
+  steps:
+  - action: return_form
+  - active_loop: null
+  - action: action_return
+  - action: survey_form
+  - active_loop: survey_form
+
+# -- 商品搜索 -- #
+- rule: Activate form for product stock search
+  steps:
+  - intent: product_stock
+  - action: action_deactivate_loop
+  - active_loop: null
+  - action: utter_product_stock_start
+  - action: product_stock_form
+  - active_loop: product_stock_form
+
+- rule: 商品搜索成功后，问问用户是否需要购买
+  condition:
+  - active_loop: product_stock_form
+  steps:
+  - action: product_stock_form
+  - active_loop: null
+  - action: action_product_search
+
+- rule: 激活下单服务，看看用户是否需要
+  condition:
+  - active_loop: order_shoes_form
+  steps:
+  # Form is deactivated
+  - action: order_shoes_form
+  - active_loop: null
+  - action: action_order_shoes
+#  - slot_was_set:
+#      - is_buy: 立即下单
+#  - action: utter_order_shoes
+
+# 对于每个订单有效，监听表单填写
+- rule: Submit survey
+  condition:
+  - active_loop: survey_form
+  steps:
+  - action: survey_form
+  - active_loop: null
+  - action: action_survey_submit
+
+
+- rule: 第一种情况，用户直接提建议
+  steps:
+  - intent: feedback
+  - action: action_deactivate_loop
+  - active_loop: null
+  - action: feedback_form  # 开启评价表单
+  - active_loop: null
+  - action: action_feedback_submit
+
+- rule: 第二种情况，用户从form入口转提建议,通过上一个action控制
+  condition:
+    - active_loop: feedback_form
+  steps:
+    - action: feedback_form
+    - active_loop: null
+    - action: action_feedback_submit
+
+- rule: 最后一个环节，服务评价
+  condition:
+    - active_loop: rate_form
+  steps:
+    - action: rate_form
+    - active_loop: null
+    - action: utter_rate_form_end

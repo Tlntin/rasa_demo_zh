@@ -1,0 +1,245 @@
+version: '2.0'
+config:
+  store_entities_as_slots: true
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- greet:
+    use_entities: true
+- goodbye:
+    use_entities: true
+- affirm:
+    use_entities: true
+- deny:
+    use_entities: true
+- mood_great:
+    use_entities: true
+- mood_unhappy:
+    use_entities: true
+- bot_challenge:
+    use_entities: true
+- order_status:
+    use_entities: true
+- return:
+    use_entities: true
+- product_stock:
+    use_entities: true
+- product_updates:
+    use_entities: true
+- inform:
+    use_entities: true
+- order_cancel:
+    use_entities: true
+- order_shoes:
+    use_entities: true
+- whats_your_name:
+    use_entities: true
+- feedback:
+    use_entities: true
+- nlu_fallback:
+    use_entities: true
+entities:
+- email
+- color
+- number
+- negation
+- is_buy
+slots:
+  color:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: true
+    influence_conversation: false
+  email:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: true
+    influence_conversation: false
+  size:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: false
+    influence_conversation: false
+  rating:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: false
+    influence_conversation: false
+  survey_complete:
+    type: rasa.shared.core.slots.BooleanSlot
+    initial_value: null
+    auto_fill: true
+    influence_conversation: true
+  requested_slot:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: true
+    influence_conversation: false
+  open_feedback:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: true
+    influence_conversation: false
+  is_buy:
+    type: rasa.shared.core.slots.TextSlot
+    initial_value: null
+    auto_fill: true
+    influence_conversation: false
+responses:
+  utter_greet:
+  - buttons:
+    - payload: 查询订单状态
+      title: 查询订单状态
+    - payload: 取消订单
+      title: 取消订单
+    - payload: 我要退货
+      title: 我要退货
+    - payload: 查询库存
+      title: 查询库存
+    - payload: 收藏关注
+      title: 收藏关注
+    - payload: 反馈建议
+      title: 反馈建议
+    text: 您好，我是你的助手小布，请问我有什么可以帮您的？
+  utter_cheer_up:
+  - text: 您好，我没懂您的意思，你可以发送“你好”来询问我其它事项。
+  utter_did_that_help:
+  - text: 您好，我没懂您的意思，你可以发送“你好”来询问我其它事项。
+  utter_happy:
+  - text: 您好，我没懂您的意思，你可以发送“你好”来询问我其它事项。
+  utter_goodbye:
+  - text: Bye
+  utter_iamabot:
+  - text: 我就是机器人呀！
+  utter_ask_order_status_form_email:
+  - text: 亲！查询订单需要提供一下邮箱哈。
+  utter_ask_return_form_email:
+  - text: 亲！关于退货请提供你的邮箱。
+  utter_ask_cancel_form_email:
+  - text: 亲！取消订单需要提供一下邮箱哈。
+  utter_ask_survey_form_open_feedback:
+  - buttons:
+    - payload: 没有
+      title: 没有
+    - payload: 反馈与建议
+      title: 反馈与建议
+    text: 亲，请问还有其它需要帮助的吗？
+  utter_ask_rate_form_rating:
+  - buttons:
+    - payload: '1'
+      title: 1星
+    - payload: '2'
+      title: 2星
+    - payload: '3'
+      title: 3星
+    - payload: '4'
+      title: 4星
+    - payload: '5'
+      title: 5星
+    text: 请对本次服务作出评价
+  utter_rate_form_end:
+  - text: 已收到您的评价，祝您生活愉快，谢谢。
+  utter_ask_feedback_form_open_feedback:
+  - text: 请输入您的建议
+  utter_feedback_form_open_feedback:
+  - text: 您的建议： “{open_feedback}”，我们已经收集，后续将会持续改进产品，谢谢您宝贵的建议。
+  utter_survey_end:
+  - text: 感谢您的反馈，祝您生活愉快。
+  utter_order_status:
+  - text: 您的账号：{email}当前订单状态为：{status}.
+  utter_no_order:
+  - text: 亲，似乎没有在系统发现您的订单。
+  utter_product_stock_start:
+  - text: 您需要买鞋子吗？
+  utter_ask_product_stock_form_size:
+  - text: 鞋子尺码多大呢？
+  utter_ask_product_stock_form_color:
+  - buttons:
+    - payload: 红色
+      title: 红色
+    - payload: 白色
+      title: 白色
+    - payload: 黑色
+      title: 黑色
+    text: 你要什么颜色的鞋子呢
+  utter_product_stock_finish:
+  - text: 当前库存有尺码：{size} ，颜色{color}
+  utter_no_stock:
+  - text: 对不起，咱这没有您想要的鞋子。
+  utter_ask_order_shoes_form_is_buy:
+  - buttons:
+    - payload: 立即下单
+      title: 立即下单
+    - payload: 不用了
+      title: 不用了
+    text: 您好，目前这个还有货哈请问您需要订货不。
+  utter_start_over:
+  - text: 好的，祝您生活愉快。
+  utter_order_shoes:
+  - text: 已帮您订购你想要的鞋子。
+  utter_order_shoes_finish:
+  - text: 您的商品：颜色：{color}，大小：{size}码的鞋子，已经帮您下单。
+  utter_order_shoes_cancel:
+  - text: 本次未下单，您可以重新查询自己喜欢的商品。
+actions:
+- action_order_status
+- action_survey_submit
+- action_cancel_order
+- action_return
+- action_product_search
+- action_give_name
+- action_feedback_submit
+- action_order_shoes
+forms:
+  order_status_form:
+    required_slots:
+      email:
+      - entity: email
+        type: from_entity
+      - intent:
+        - inform
+        type: from_text
+  survey_form:
+    required_slots:
+      open_feedback:
+      - type: from_text
+  feedback_form:
+    required_slots:
+      open_feedback:
+      - type: from_text
+  rate_form:
+    required_slots:
+      rating:
+      - entity: number
+        type: from_entity
+  cancel_form:
+    required_slots:
+      email:
+      - entity: email
+        type: from_entity
+  return_form:
+    required_slots:
+      email:
+      - entity: email
+        type: from_entity
+  product_stock_form:
+    required_slots:
+      color:
+      - entity: color
+        type: from_text
+      size:
+      - entity: number
+        type: from_entity
+  order_shoes_form:
+    required_slots:
+      color:
+      - entity: color
+        type: from_text
+      is_buy:
+      - entity: is_buy
+        type: from_text
+      size:
+      - entity: number
+        type: from_entity
+e2e_actions: []

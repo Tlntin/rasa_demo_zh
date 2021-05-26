@@ -1,0 +1,171 @@
+version: "2.0"
+nlu:
+- intent: greet
+  examples: |
+    - 你好
+    - 嗨
+    - 你好呀
+    - hello
+    - 早上好
+    - 晚上好
+    - 下午好
+- intent: goodbye
+  examples: |
+    - 886
+    - 拜拜
+    - bye
+    - 告辞
+    - 再见
+    - Bye
+- intent: affirm
+  examples: |
+    - 嗯
+    - 是的
+    - yes
+    - ok
+    - 好的
+    - 可以
+    - 没错
+    - 对的
+- intent: deny
+  examples: |
+    - 不
+    - 不了
+    - 否
+    - 算了
+    - 不要
+    - 不行
+    - 没有
+    - 没
+    - 没有了
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+- intent: bot_challenge
+  examples: |
+    - 你是机器人吗？
+    - 你是人类吗？
+    - 你是真人吗
+    - 和我说话的是机器人？
+    - 和我说话的是人类不？
+- intent: order_status
+  examples: |
+    - 我的鞋什么时候进来
+    - 他们什么时候到这里
+    - 我想检查我的订单状态
+    - 检查状态
+    - 我想更新我的订单
+    - 检查我的订单状态
+    - 我还没有收到订单，我们可以检查一下吗？
+    - 我的订单在哪里？
+    - 我要检查订单状态
+- intent: order_cancel
+  examples: |
+    - 我想取消订单
+    - 取消我的鞋子
+    - 取消我的订单
+    - 我要取消订单。
+    - 鞋子不要了，帮我取消掉。
+    - 我改变想法了，帮我取消这个订单。
+    - 取消订单
+- intent: return
+  examples: |
+    - 开始退货
+    - 我[不要](negation)鞋子了
+    - 我该如何退货？
+    - 还一些鞋子
+    - 哪些物品可以退货？
+    - 我要退货
+    - 好的。我想归还我买的一些鞋子
+    - 是的，我想退还一些东西
+    - 我不要鞋子了
+- intent: product_updates
+  examples: |
+    - 网站上有什么新消息？
+    - 如何查找更新
+    - 我想注册更新
+    - 订阅产品更新
+    - 订阅更新
+    - 收藏关注
+    - 我[不](negation)想要订阅
+    - 我[不](negation)订阅
+- intent: product_stock
+  examples: |
+    - 查询库存
+    - 请问有[黑色](color)的鞋子吗？
+    - "[白色](color)鞋怎么样？"
+    - 你的存货还有多少鞋？
+    - 您的鞋子尺码是否超出9码
+    - 你有我的特殊鞋子吗
+    - 我在寻找新鞋
+    - 请问库存有[黑色](color)鞋子吗？
+    - [白色](color)鞋怎么样？
+    - 请问还有多少存货呢？
+    - 检查库存
+    - 请问你这边有合适我的鞋子吗
+    - 我想买双新鞋子
+- intent: inform
+  examples: |
+    - example@rasa.com
+    - 我的邮箱是 example@yahoo.com
+    - "[黑色](color)鞋子"
+    - 一双[白色](color)鞋子
+    - 我要一双[橘黄色](color)的鞋子
+    - "[棕色](color)"
+    - "[白色](color)"
+    - 123
+    - a@b.com
+    - xyz@hulaloo.ai
+    - "[灰白](color)"
+    - "[米色](color)与[蓝色](color)"
+    - 等等，实际上那封邮件是错的。应该是 asdf1@asdf.com
+    - asdf@asdf.com
+    - "[灰色](color)"
+    - test@test.com
+
+- intent: feedback
+  examples: |
+    - 我要反馈
+    - 反馈建议
+    - 个人建议
+    - 建议
+    - 我建议
+
+
+- intent: order_shoes
+  examples: |
+    - 我想买双写
+    - 我要买鞋
+    - 给我买一双鞋
+    - 买鞋
+
+
