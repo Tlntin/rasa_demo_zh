@@ -27,6 +27,8 @@ nlu:
     - 可以
     - 没错
     - 对的
+    - 确认
+    - 确认下单
 - intent: deny
   examples: |
     - 不
@@ -38,6 +40,9 @@ nlu:
     - 没有
     - 没
     - 没有了
+    - 取消
+    - 取消下单
+    - 暂时不用
 - intent: mood_great
   examples: |
     - perfect
@@ -133,25 +138,6 @@ nlu:
     - 检查库存
     - 请问你这边有合适我的鞋子吗
     - 我想买双新鞋子
-- intent: inform
-  examples: |
-    - example@rasa.com
-    - 我的邮箱是 example@yahoo.com
-    - "[黑色](color)鞋子"
-    - 一双[白色](color)鞋子
-    - 我要一双[橘黄色](color)的鞋子
-    - "[棕色](color)"
-    - "[白色](color)"
-    - 123
-    - a@b.com
-    - xyz@hulaloo.ai
-    - "[灰白](color)"
-    - "[米色](color)与[蓝色](color)"
-    - 等等，实际上那封邮件是错的。应该是 asdf1@asdf.com
-    - asdf@asdf.com
-    - "[灰色](color)"
-    - test@test.com
-
 - intent: feedback
   examples: |
     - 我要反馈
@@ -159,13 +145,26 @@ nlu:
     - 个人建议
     - 建议
     - 我建议
-
-
 - intent: order_shoes
   examples: |
-    - 我想买双写
+    - 我想买双鞋
     - 我要买鞋
     - 给我买一双鞋
     - 买鞋
+    - 一双[白色](color)鞋子
+    - 我要一num双[橘黄色](color)的鞋子
+    - 2双，32码
+    - 你好，我要两双[黑色](color)鞋子
+    - 我要两双[黑色](color)鞋子，32码
+    - 2双，21码
+    - 给我来两双[黑色](color)鞋子
 
+- intent: thank
+  examples: |
+    - 谢谢
+    - 多谢了
+    - 谢谢你了
+    - 辛苦了
+    - 辛苦你了
+    - 感谢
 

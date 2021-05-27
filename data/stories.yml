@@ -12,10 +12,10 @@ stories:
   - intent: nlu_fallback
   - action: utter_cheer_up
 
-- story: order shoes
-  steps:
-  - intent: order_shoes
-  - action: utter_order_shoes
+#- story: order shoes
+#  steps:
+#  - intent: order_shoes
+#  - action: utter_order_shoes
 
 # 补充--仓库查询后问卷线
 - story: User stops product_stock
@@ -72,3 +72,49 @@ stories:
   steps:
   - intent: whats_your_name
   - action: action_give_name
+
+## 用户确认下单
+#- story: 所有槽位填充完成，并且用户确认下单
+#  steps:
+#  - slot_was_set:
+#    - requested_slot: null
+#  - active_loop: null
+#  - action: action_order_shoes
+#  - intent: affirm
+#  - action: action_order_shoes_finish
+
+- story: 询问用户如果有货的情况下是否立即下单
+  steps:
+  - slot_was_set:
+      - requested_slot: null
+  - active_loop: null
+  - action: action_order_shoes
+  - intent: affirm
+  - action: utter_yes_or_no
+
+- story: 如果用户选择立即下单，则告诉用户下单完成
+  steps:
+  - slot_was_set:
+      - requested_slot: null
+  - active_loop: null
+  - action: action_order_shoes
+  - intent: affirm
+  - action: utter_yes_or_no
+  - intent: affirm
+  - action: action_order_shoes_finish
+
+
+# 用户不想下单
+- story: 所有槽位填充完成，但是用户不想下单
+  steps:
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_order_shoes
+  - intent: deny
+  - action: utter_order_shoes_cancel
+
+- story: 遇到感谢： 直接回复不客气
+  steps:
+    - intent: thank
+    - action: utter_no_thank

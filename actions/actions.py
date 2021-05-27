@@ -130,7 +130,12 @@ class ActionProductSearch(Action):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
         # get slots and save as tuple
-        shoe = [(tracker.get_slot("color")), (tracker.get_slot("size"))]
+        size_list = tracker.get_slot("size")
+        if isinstance(size_list, list):
+            size = size_list[-1]
+        else:
+            size = size_list
+        shoe = (tracker.get_slot("color"), size)
         # place cursor on correct row based on search criteria
 
         cursor.execute("SELECT * FROM inventory WHERE color=? AND size=?", shoe)
@@ -221,11 +226,41 @@ class ActionOrderShoes(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        is_buy = tracker.get_slot("is_buy")
-        if is_buy == "立即下单":
-            dispatcher.utter_message(response="utter_order_shoes_finish")
+        size_list = tracker.get_slot("size")
+        color = tracker.get_slot("color")
+        # intent = tracker.get_intent_of_latest_message()  # 获取最近意图
+        # print(intent, type(intent))
+        # print(tracker.events_after_latest_restart())
+        # print(tracker.get_latest_entity_values("number"))
+        # 判断是否有两个槽位
+        if isinstance(size_list, list):
+            if len(size_list) > 1:
+                num = size_list[0]
+                size = size_list[-1]
+            else:
+                dispatcher.utter_message(text="请问需要几双，多大码的")
+                return [SlotSet("size", None), ActiveLoop("order_shoes_form")]
         else:
-            dispatcher.utter_message(response="utter_order_shoes_cancel")
-        # 清空槽位，方便用户重新查询
+            dispatcher.utter_message(text="请问需要几双，多大码的")
+            return [SlotSet("size", None), ActiveLoop("order_shoes_form")]
+        dispatcher.utter_message(text=f"您订购的商品为：{num}双大小为{size}码的{color}鞋子。")
+        dispatcher.utter_message(response="utter_confirm_order")
+        return []
+
+
+class ActionOrderShoesFinish(Action):
+    """
+    订单完成-自定义动作
+    """
+    def name(self) -> Text:
+        return "action_order_shoes_finish"
+
+    def run(
+        self,
+        dispatcher: "CollectingDispatcher",
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="您好，您的商品已经帮您下单了，请您耐心等待。")
         slots_to_reset = ["size", "color"]
-        return [SlotSet(slot, None) for slot in slots_to_reset]
+        return [SlotSet(slot, None) for slot in slots_to_reset] + [ActiveLoop("survey_form")]

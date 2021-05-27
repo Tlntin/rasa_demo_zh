@@ -11,13 +11,17 @@ pipeline:
   - name: LanguageModelFeaturizer
     model_weights: "data/model"  # bert_chinese_base
     model_name: "bert"
-  # 测试加入Spacy做实体抽取
-  - name: SpacyNLP
-    model: "zh_core_web_trf"
-    case_sensitive: False
-  - name: SpacyEntityExtractor
+#  # 测试加入Spacy做实体抽取-只支持预先设置的实体
+#  - name: SpacyNLP
+#    model: "zh_core_web_trf"
+#    case_sensitive: False
+#  - name: SpacyEntityExtractor
 #  # 添加CRF自定义实体识别
 #  - name: CRFEntityExtractor
+#  - name: RegexEntityExtractor
+  # 自定义实体识别器
+  - name: "match_entity_extractor.MatchEntityExtractor"
+    dictionary_path: "data/lookup_tables/"
   - name: RegexFeaturizer
   - name: LexicalSyntacticFeaturizer
   - name: CountVectorsFeaturizer

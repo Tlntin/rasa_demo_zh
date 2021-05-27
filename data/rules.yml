@@ -91,7 +91,6 @@ rules:
   - intent: product_stock
   - action: action_deactivate_loop
   - active_loop: null
-  - action: utter_product_stock_start
   - action: product_stock_form
   - active_loop: product_stock_form
 
@@ -114,6 +113,15 @@ rules:
 #  - slot_was_set:
 #      - is_buy: 立即下单
 #  - action: utter_order_shoes
+
+# -- 新增用户购买直接下单模式 -- #
+- rule: 用户直接指定商品，然后下单
+  steps:
+    - intent: order_shoes
+    - action: action_deactivate_loop  # 先关闭其它表单激活
+    - active_loop: null
+    - action: order_shoes_form  # 表单开始
+    - active_loop: order_shoes_form  # 持续激活表单
 
 # 对于每个订单有效，监听表单填写
 - rule: Submit survey
