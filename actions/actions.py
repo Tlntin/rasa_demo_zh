@@ -74,6 +74,7 @@ class ActionCancelOrder(Action):
             cursor.close()
             db.close()
             dispatcher.utter_message(text="亲，您的订单已经取消成功。")
+            # dispatcher.utter_button_message()
         return []
 
 
@@ -228,24 +229,40 @@ class ActionOrderShoes(Action):
     ) -> List[Dict[Text, Any]]:
         size_list = tracker.get_slot("size")
         color = tracker.get_slot("color")
-        # intent = tracker.get_intent_of_latest_message()  # 获取最近意图
-        # print(intent, type(intent))
-        # print(tracker.events_after_latest_restart())
-        # print(tracker.get_latest_entity_values("number"))
-        # 判断是否有两个槽位
-        if isinstance(size_list, list):
-            if len(size_list) > 1:
-                num = size_list[0]
-                size = size_list[-1]
-            else:
-                dispatcher.utter_message(text="请问需要几双，多大码的")
-                return [SlotSet("size", None), ActiveLoop("order_shoes_form")]
-        else:
-            dispatcher.utter_message(text="请问需要几双，多大码的")
+        num_of_shoes = tracker.get_slot("num_of_shoes")
+        # 待完善，先下班。。。用于防止num_of_shoes识别错误
+        # if size_list is not None:
+        #     if isinstance(size_list, list):
+        #         size_str_list = [str(size) for size in size_list]
+        #         if num_of_shoes not in size_str_list:
+        #             dispatcher.utter_message(text="请问需要多大码的")
+        #             return [SlotSet("size", None), SlotSet("num_of_shoes", None), ActiveLoop("order_shoes_form")]
+        #         else:
+        #             size_list.remove(int(num_of_shoes))
+        #     else:
+        #         if num_of_shoes == str(size_list):
+        #             dispatcher.utter_message(text="请问需要多大码的")
+        #             return [SlotSet("size", None), ActiveLoop("order_shoes_form")]
+        #         else:
+        if isinstance(num_of_shoes, str):
+            num_of_shoes = int(num_of_shoes)
+        # 去除几双后，看看还有几个槽位没填
+        if not isinstance(size_list, list):
+            size_list = [size_list]
+        size_list = [size for size in size_list if size != num_of_shoes]
+        # print(num_of_shoes, type(num_of_shoes), size_list)
+        # 如果去除了数量后槽位为空，则重新问用户要size
+        if len(size_list) == 0:
+            dispatcher.utter_message(text="请问需要多大码的")
             return [SlotSet("size", None), ActiveLoop("order_shoes_form")]
-        dispatcher.utter_message(text=f"您订购的商品为：{num}双大小为{size}码的{color}鞋子。")
-        dispatcher.utter_message(response="utter_confirm_order")
-        return []
+        elif size_list[0] is None:
+            dispatcher.utter_message(text="请问需要多大码的")
+            return [SlotSet("size", None), ActiveLoop("order_shoes_form")]
+        else:
+            size = size_list[0]
+            dispatcher.utter_message(text=f"您订购的商品为：{num_of_shoes}双大小为{size}码的{color}鞋子。")
+            dispatcher.utter_message(response="utter_confirm_order")
+            return []
 
 
 class ActionOrderShoesFinish(Action):

@@ -93,6 +93,7 @@ nlu:
     - 我还没有收到订单，我们可以检查一下吗？
     - 我的订单在哪里？
     - 我要检查订单状态
+    - 查询订单状态
 - intent: order_cancel
   examples: |
     - 我想取消订单
@@ -149,16 +150,15 @@ nlu:
   examples: |
     - 我想买双鞋
     - 我要买鞋
-    - 给我买一双鞋
+    - 给我买[一双](num_of_shoes)鞋
     - 买鞋
-    - 一双[白色](color)鞋子
-    - 我要一num双[橘黄色](color)的鞋子
+    - [一双](num_of_shoes)[白色](color)鞋子
+    - 我要[一双](num_of_shoes)[橘黄色](color)的鞋子
     - 2双，32码
-    - 你好，我要两双[黑色](color)鞋子
-    - 我要两双[黑色](color)鞋子，32码
-    - 2双，21码
-    - 给我来两双[黑色](color)鞋子
-
+    - 你好，我要[两双](num_of_shoes)[黑色](color)鞋子
+    - 我要[两双](num_of_shoes)[黑色](color)鞋子，32码
+    - [2双](num_of_shoes)鞋，21码
+    - 给我来[两双](num_of_shoes)[黑色](color)鞋子
 - intent: thank
   examples: |
     - 谢谢
@@ -167,4 +167,76 @@ nlu:
     - 辛苦了
     - 辛苦你了
     - 感谢
-
+- synonym: 黑色
+  examples: |
+    - 黑
+- synonym: 白色
+  examples: |
+    - 白
+    - 小白
+- synonym: 红色
+  examples: |
+    - 红
+    - 红红的
+- synonym: '1'
+  examples: |
+    - 一双
+    - 1双
+- synonym: '2'
+  examples: |
+    - 两双
+    - 2双
+- synonym: '3'
+  examples: |
+    - 三双
+    - 3双
+- synonym: '4'
+  examples: |
+    - 四双
+    - 4双
+- synonym: '5'
+  examples: |
+    - 五双
+    - 5双
+- synonym: '6'
+  examples: |
+    - 六双
+    - 6双
+- synonym: '7'
+  examples: |
+    - 七双
+    - 7双
+- synonym: '8'
+  examples: |
+    - 八双
+    - 8双
+- synonym: '9'
+  examples: |
+    - 九双
+    - 9双
+- synonym: '10'
+  examples: |
+    - 十双
+    - 10双
+- lookup: num_of_shoes
+  examples: |
+    - 一双
+    - 两双
+    - 三双
+    - 四双
+    - 五双
+    - 六双
+    - 七双
+    - 八双
+    - 九双
+    - 10双
+    - 1双
+    - 2双
+    - 3双
+    - 4双
+    - 5双
+    - 6双
+    - 7双
+    - 8双
+    - 9双
+    - 10双

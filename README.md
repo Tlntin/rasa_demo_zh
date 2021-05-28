@@ -40,7 +40,17 @@ docker run -p 8000:8000 --name duck rasa/duckling
 ```bash
 rasa x
 ```
-
+11. 启动api服务
+```bash
+rasa run -m models --enable-api --cors "*" --debug
+```
+12. html接口示范
+```bash
+https://github.com/JiteshGaikwad/Chatbot-Widget
+```
+```bash
+export TOKENIZERS_PARALLELISM=true
+```
 ### 当前进度
 - [x] 订单查询
 - [x] 取消订单

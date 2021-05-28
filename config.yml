@@ -7,21 +7,25 @@ pipeline:
 # # If you'd like to customize it, uncomment and adjust the pipeline.
 # # See https://rasa.com/docs/rasa/tuning-your-model for more information.
 #   - name: WhitespaceTokenizer
-  - name: LanguageModelTokenizer
-  - name: LanguageModelFeaturizer
-    model_weights: "data/model"  # bert_chinese_base
-    model_name: "bert"
-#  # 测试加入Spacy做实体抽取-只支持预先设置的实体
-#  - name: SpacyNLP
-#    model: "zh_core_web_trf"
-#    case_sensitive: False
+#  - name: LanguageModelTokenizer
+  # 测试加入Spacy做实体抽取-只支持预先设置的实体，不过它的分词器可以支持自定义实体抽取
+  - name: SpacyNLP
+    model: "zh_core_web_trf"
+    case_sensitive: False
+  - name: SpacyTokenizer
 #  - name: SpacyEntityExtractor
-#  # 添加CRF自定义实体识别
+  - name: SpacyFeaturizer
+#  # 额外加入bert试试，不行就算了，实测，加了bert效果反而变差了，看来不适合与spacy搭配
+#  - name: "my_tokenizer.MyTokenizer"
+#  - name: LanguageModelFeaturizer
+#    model_weights: "data/model"  # bert_chinese_base
+#    model_name: "bert"
+  # 添加CRF自定义实体识别
 #  - name: CRFEntityExtractor
-#  - name: RegexEntityExtractor
-  # 自定义实体识别器
-  - name: "match_entity_extractor.MatchEntityExtractor"
-    dictionary_path: "data/lookup_tables/"
+#  # 自定义实体识别器
+#  - name: "match_entity_extractor.MatchEntityExtractor"
+#    dictionary_path: "data/lookup_tables/"
+  - name: RegexEntityExtractor
   - name: RegexFeaturizer
   - name: LexicalSyntacticFeaturizer
   - name: CountVectorsFeaturizer
@@ -32,18 +36,20 @@ pipeline:
   - name: DIETClassifier
     epochs: 100
     constrain_similarities: true
+    model_confidence: linear_norm  # 消除官方警告
   - name: EntitySynonymMapper  # 同义实体映射
   - name: ResponseSelector
     epochs: 100
     constrain_similarities: true
+    model_confidence: linear_norm  # 消除官方警告
   - name: FallbackClassifier
-    threshold: 0.6
-    ambiguity_threshold: 0.3
+    threshold: 0.3
+    ambiguity_threshold: 0.1
   - name: DucklingEntityExtractor
     # url of the running duckling server
     url: "http://localhost:8000"
     # dimensions to extract
-    dimensions: [ "number", "email"]
+    dimensions: ["number", "email", "time"]
     locale: "zh_CN"
     timezone: "Asia/Shanghai"
 
@@ -58,6 +64,7 @@ policies:
       max_history: 5
       epochs: 100
       constrain_similarities: true
+      model_confidence: linear_norm
     - name: RulePolicy
       core_fallback_threshold: 0.4
       core_fallback_action_name: "action_default_fallback"

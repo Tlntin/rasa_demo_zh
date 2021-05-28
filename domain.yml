@@ -47,7 +47,7 @@ entities:
 - number
 - negation
 - is_buy
-- num
+- num_of_shoes
 slots:
   color:
     type: rasa.shared.core.slots.TextSlot
@@ -84,10 +84,10 @@ slots:
     initial_value: null
     auto_fill: true
     influence_conversation: false
-  is_buy:
+  num_of_shoes:
     type: rasa.shared.core.slots.TextSlot
     initial_value: null
-    auto_fill: true
+    auto_fill: false
     influence_conversation: false
 responses:
   utter_greet:
@@ -170,6 +170,8 @@ responses:
   - text: 对不起，咱这没有您想要的鞋子。
   utter_ask_order_shoes_form_color:
   - text: 请问要什么颜色的鞋子呢
+  utter_ask_order_shoes_form_num_of_shoes:
+  - text: 请问你要买几双鞋呢？
   utter_start_over:
   - text: 好的，祝您生活愉快。
   utter_order_shoes:
@@ -248,6 +250,9 @@ forms:
     required_slots:
       color:
       - entity: color
+        type: from_entity
+      num_of_shoes:
+      - entity: num_of_shoes
         type: from_entity
       size:
       - entity: number

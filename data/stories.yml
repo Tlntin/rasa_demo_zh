@@ -105,12 +105,23 @@ stories:
 
 
 # 用户不想下单
-- story: 所有槽位填充完成，但是用户不想下单
+- story: 所有槽位填充完成，用户并不确认
   steps:
   - slot_was_set:
     - requested_slot: null
   - active_loop: null
   - action: action_order_shoes
+  - intent: deny
+  - action: utter_order_shoes_cancel
+
+- story: 所有槽位填充完成，用户确认是他的意愿，但是不下单
+  steps:
+  - slot_was_set:
+      - requested_slot: null
+  - active_loop: null
+  - action: action_order_shoes
+  - intent: affirm
+  - action: utter_yes_or_no
   - intent: deny
   - action: utter_order_shoes_cancel
 
