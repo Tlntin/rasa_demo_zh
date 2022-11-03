@@ -15,7 +15,8 @@ pipeline:
   - name: LanguageModelFeaturizer
     model_weights: "data/model"  # bert_chinese_base
     # model_weights: "data/distilbert-base-zh-cased"
-    model_name: "distilbert"
+    # model_name: "distilbert"
+    model_name: "bert"
     # from_pt: false
   - name: RegexEntityExtractor
   - name: RegexFeaturizer
