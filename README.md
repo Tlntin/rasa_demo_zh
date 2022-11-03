@@ -32,7 +32,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --ex
 6. 安装spacy与中文模型
 ```bash
 pip install spacy
-python -m spacy download zh_core_web_trf
+python -m spacy download zh_core_web_sm
 ```
 
 7. 设置rasa x密码
