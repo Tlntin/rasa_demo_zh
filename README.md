@@ -26,7 +26,7 @@ make -j8
 ```
 5. 安装剩余python模块
 ```bash
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple some-package --extra-index-url https://pypi.rasa.com/simple
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --extra-index-url https://pypi.rasa.com/simple
 ```
 
 6. 安装spacy与中文模型
