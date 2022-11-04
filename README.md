@@ -91,3 +91,20 @@ export TOKENIZERS_PARALLELISM=true
  - action_back
 
 ```
+
+
+### 错误修复
+
+- 提示时区错误
+```bash
+ERROR    rasa.core.agent  - Could not load model due to Timezone offset does not match\
+ system offset: 0 != 28800. Please, check your config files..
+```
+
+- 解决方法：
+
+```bash
+sudo vim /etc/timezone
+# 替换为：
+Asia/Shanghai
+```
