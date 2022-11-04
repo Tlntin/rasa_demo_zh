@@ -5,46 +5,64 @@
 ```bash
 pip install numpy==1.18.5
 ```
-2. 安装tensorflow-gpu==2.3.2
+2. 安装tensorflow==2.3.1(注意，除非是你源码编译的，否则直接装CPU版就行了), pytorch==1.8.1(可选值，可以不装，这个是spacy需要，建议装一下)，理论上CPU版的就够用了。
 ```bash
-pip install tensorflow-gpu==2.3.2
+pip install tensorflow==2.3.1
+pip install torch==1.8.1
 ```
-3. 安装rasa x
+3. 安装rasa以及rasa-sdk。
 ```bash
-pip install --use-deprecated=legacy-resolver --user rasa-x --extra-index-url https://pypi.rasa.com/simple
+pip install rasa==2.8.1
+pip install rasa-sdk==2.8.1
 ```
-4. 安装其它模块
+4. 编译或者直接安装xmlsec库，否则pip安装的xmlsec的时候必报错。
 ```bash
-pip install -r requirements.txt
+sudo apt install libxmlsec1-dev libtool-bin
+# 或者源码安装也行
+# 源码下载地址 https://github.com/lsh123/xmlsec/tags
+# 解压源码，进入对应目录后。执行下面操作进行安装(j8根据你的CPU核心线程数，可以为j+其它数字)
+./autogen.sh
+make -j8
 ```
-5. 修改rasa源码，使得其支持zh。
+5. 安装剩余python模块
 ```bash
-UnsupportedLanguageError: component 'LanguageModelTokenizer' does not support language 'zh'.
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --extra-index-url https://pypi.rasa.com/simple
 ```
-修改路径为：/home/tlntin/anaconda3/envs/rasa2/lib/python3.8/site-packages/rasa/nlu/tokenizers/whitespace_tokenizer.py
-去除`not_supported_language_list = ["zh", "ja", "th"]`中的zh。
-6. 设置rasa x密码
+
+6. 安装spacy与中文模型
+```bash
+pip install spacy
+python -m spacy download zh_core_web_sm
+```
+
+7. 设置rasa x密码
 ```bash
 export RASA_X_PASSWORD=< you password>
 ```
-7. 运行自定义actions
+8. 运行自定义actions
 ```bash
 rasa run actions
 ```
-8. 手动去HuggingFace下载模型[链接](https://huggingface.co/bert-base-chinese/tree/main)
-9. 启动实体标注器
+9. 手动去HuggingFace下载模型[链接](https://huggingface.co/bert-base-chinese/tree/main), 将tensorflow的权重，放到data/model文件夹下面,参考结果如下
+```bash
+data/model/config.json
+data/model/pytorch_model.bin(可选)
+data/model/tf_model.h5
+data/model/vocab.txt
+```
+10. 启动实体标注器
 ```bash
 docker run -p 8000:8000 --name duck rasa/duckling
 ```
-10. 运行rasa x，实现前端可视化
+11. 运行rasa x，实现前端可视化
 ```bash
 rasa x
 ```
-11. 启动api服务
+12. 启动api服务
 ```bash
 rasa run -m models --enable-api --cors "*" --debug
 ```
-12. html接口示范
+13. html前端界面（用nginx装一下或者用浏览器打开html都可以测试）
 ```bash
 https://github.com/JiteshGaikwad/Chatbot-Widget
 ```
@@ -72,4 +90,21 @@ export TOKENIZERS_PARALLELISM=true
  - action_two_stage_fallback
  - action_back
 
+```
+
+
+### 错误修复
+
+- 提示时区错误
+```bash
+ERROR    rasa.core.agent  - Could not load model due to Timezone offset does not match\
+ system offset: 0 != 28800. Please, check your config files..
+```
+
+- 解决方法：
+
+```bash
+sudo vim /etc/timezone
+# 替换为：
+Asia/Shanghai
 ```
